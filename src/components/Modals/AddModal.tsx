@@ -1,5 +1,6 @@
 import { Box, Modal, Typography } from "@mui/material";
 import AddForm from "../Forms/AddForm";
+import { IStock } from "../../types/IStock";
 
 const style = {
   position: "absolute",
@@ -15,9 +16,10 @@ const style = {
 interface IModal {
   open: boolean;
   handleClose: () => void;
+  setStocks: React.Dispatch<React.SetStateAction<IStock[]>>;
 }
 
-const AddModal: React.FC<IModal> = ({ open, handleClose }) => {
+const AddModal: React.FC<IModal> = ({ open, handleClose, setStocks }) => {
   return (
     <Modal
       open={open}
@@ -29,7 +31,7 @@ const AddModal: React.FC<IModal> = ({ open, handleClose }) => {
         <Typography id="modal-modal-title" variant="h4" component="h2">
           Добавить Акцию
         </Typography>
-        <AddForm />
+        <AddForm setStocks={setStocks} />
       </Box>
     </Modal>
   );

@@ -2,16 +2,24 @@ import { Button, Stack, TextField } from "@mui/material";
 import { useFormik } from "formik";
 import { IStock } from "../../types/IStock";
 import * as yup from "yup";
+import { addStocks } from "../../api/stocks";
 
 const addFormInit = {
+  id: 0,
   mailingName: "",
   date: "",
   quantity: 0,
 };
 
-const AddForm = () => {
-  const handleFormSubmit = (values: IStock) => {
-    console.log(values);
+interface IAddForm {
+  setStocks: React.Dispatch<React.SetStateAction<IStock[]>>;
+}
+
+const AddForm: React.FC<IAddForm> = ({ setStocks }) => {
+  const handleFormSubmit = async (values: IStock) => {
+    console.log("Formik: ", values);
+    const res = await addStocks(values);
+    setStocks(res.data);
   };
 
   const addFormValidationSchema = yup.object().shape({

@@ -5,20 +5,22 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { IconButton } from "@mui/material";
+import { CircularProgress, IconButton } from "@mui/material";
 import { Edit2, Trash } from "iconsax-react";
+import { IStock } from "../../types/IStock";
+import { deleteStocks } from "../../api/stocks";
 
-function createData(mailingName: string, date: number, quantity: number) {
-  return { mailingName, date, quantity };
+interface ITableStocks {
+  stocks: IStock[];
+  setStocks: React.Dispatch<React.SetStateAction<IStock[]>>;
 }
 
-const rows = [
-  createData("Акция1", 159, 6.0),
-  createData("Акция2", 237, 9.0),
-  createData("Акция3", 262, 16.0),
-];
+const TableStocks: React.FC<ITableStocks> = ({ stocks, setStocks }) => {
+  const handleDelete = async (id: number) => {
+    const res = await deleteStocks(id);
+    setStocks(res.data);
+  };
 
-export default function TableStocks() {
   return (
     <TableContainer sx={{ width: "1000px" }} component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -32,7 +34,14 @@ export default function TableStocks() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {!stocks.length && (
+            <TableRow>
+              <TableCell align="left">
+                <CircularProgress />
+              </TableCell>
+            </TableRow>
+          )}
+          {stocks.map((row) => (
             <TableRow key={row.mailingName} hover>
               <TableCell component="th" scope="row">
                 {row.mailingName}
@@ -45,7 +54,7 @@ export default function TableStocks() {
                 </IconButton>
               </TableCell>
               <TableCell align="left">
-                <IconButton>
+                <IconButton onClick={() => handleDelete(row.id)}>
                   <Trash />
                 </IconButton>
               </TableCell>
@@ -55,4 +64,6 @@ export default function TableStocks() {
       </Table>
     </TableContainer>
   );
-}
+};
+
+export default TableStocks;
