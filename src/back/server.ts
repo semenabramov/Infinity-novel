@@ -39,14 +39,14 @@ async function deleteStocks(id: number) {
 }
 
 // Для моделирования нагрузки
-const delay = (ms: number) => {
-  return new Promise((res) =>
-    setTimeout(() => {
-      console.log(`Задкржка ${ms}...`);
-      res(ms);
-    }, ms)
-  );
-};
+// const delay = (ms: number) => {
+//   return new Promise((res) =>
+//     setTimeout(() => {
+//       console.log(`Задкржка ${ms}...`);
+//       res(ms);
+//     }, ms)
+//   );
+// };
 
 const app: Express = express();
 
@@ -58,7 +58,6 @@ app.use(
 
 app.get("/api/stocks", cors(), (req, res) => {
   async function send() {
-    await delay(1000);
     const stocks = await getStocks();
     console.log(stocks);
     res.json(stocks);
